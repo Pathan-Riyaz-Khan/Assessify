@@ -1,5 +1,5 @@
 <template>
   <v-container>
-    <h2>Hello Assessify</h2>
+    <h2>{{ $t("messages.helloAssessify") }}</h2>
   </v-container>
 </template>
