@@ -14,7 +14,7 @@ const routes: RouteRecordRaw[] = [
     name: 'LandingPage',
     path: '/',
     component: LandingPage,
-  }
+  },
 ]
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
