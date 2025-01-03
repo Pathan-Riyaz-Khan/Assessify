@@ -1,8 +1,12 @@
 <template>
-  <v-app-bar class="" :elevation="0" color="background">
+  <v-app-bar
+    class="mr-3 mt-3 mb-3 pr-3 pt-3 pb-3"
+    :elevation="0"
+    color="background"
+  >
     <v-container>
       <v-row class="align-center jusitfy-space-between">
-        <v-col>
+        <v-col class="mr-3 pr-3">
           <div class="d-flex">
             <v-img
               height="30"
@@ -22,15 +26,14 @@
             >
           </div>
         </v-col>
-        <v-col>
+        <v-col class="ml-5 pl-5">
           <div class="d-flex">
             <router-link
               to="#"
               :class="[
                 'text-decoration-none',
                 'font-weight',
-                'mx-2',
-                'px-2',
+                'px-6',
                 dark ? 'text-white' : 'link-color',
               ]"
               >Home</router-link
@@ -40,8 +43,7 @@
               :class="[
                 'text-decoration-none',
                 'font-weight',
-                'mx-2',
-                'px-2',
+                'px-6',
                 dark ? 'text-white' : 'link-color',
               ]"
               >Test</router-link
@@ -51,48 +53,60 @@
               :class="[
                 'text-decoration-none',
                 'font-weight',
-                'mx-2',
-                'px-2',
+                'd-flex',
+                'px-6',
                 dark ? 'text-white' : 'link-color',
               ]"
-              >About Us</router-link
+              >Assesify?</router-link
             >
             <router-link
               to="#"
               :class="[
                 'text-decoration-none',
                 'font-weight',
-                'mx-2',
-                'px-2',
+                'px-6',
+                'd-flex',
                 dark ? 'text-white' : 'link-color',
               ]"
-              >Contact Us</router-link
+              >ContactUs</router-link
             >
           </div>
         </v-col>
-        <v-col>
+        <v-col class="ml-12 pl-13">
           <v-btn
             :icon="dark ? 'mdi-weather-sunny' : 'mdi-weather-night'"
             :color="dark ? 'white' : 'dark'"
             variant="text"
-            class="ml-6"
+            class="mr-4"
             @click="toggleTheme"
           >
           </v-btn>
           <v-btn
-            size=""
-            rounded="xl"
+            size="large"
             color="#1565c0"
-            variant="flat"
-            :class="['ma-2', 'pa-2', 'text-subtitle-2']"
+            variant="elevated"
+            :class="[
+              'ma-2',
+              'pa-2',
+              'text-subtitle-2',
+              'text-align-end',
+              'rounded-ts-lg',
+              'rounded-be-lg',
+            ]"
             >Create Quiz</v-btn
           >
           <v-btn
-            size=""
-            rounded="xl"
+            size="large"
             :color="dark ? '#1565c0' : '#1565c0'"
             variant="outlined"
-            :class="['ma-2', 'pa-2', 'text-subtitle-2']"
+            :class="[
+              'ma-2',
+              'pa-2',
+              'text-subtitle-2',
+              'text-align-end',
+              'rounded-ts-lg',
+              'rounded-be-lg',
+            ]"
             >Attempt Quiz</v-btn
           >
         </v-col>
