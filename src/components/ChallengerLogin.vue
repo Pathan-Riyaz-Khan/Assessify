@@ -24,6 +24,17 @@
           >
             {{ $t("labels.assesify") }}
           </div>
+          <div
+            :class="[
+              'font-poppins',
+              'text-h6',
+              '',
+              'd-block',
+              dark ? '' : 'text-primary',
+            ]"
+          >
+            {{ $t("labels.userLogin") }}
+          </div>
         </v-card-title>
         <v-card-text>
           <v-text-field

@@ -36,7 +36,6 @@
             @click="toggleTheme"
           />
           <v-btn
-            v-if="!isNotLandingPage"
             size="large"
             color="primary"
             variant="outlined"
@@ -48,15 +47,14 @@
               'rounded-ts-lg',
               'rounded-be-lg',
             ]"
+            :to="{ name: 'AdminLogin' }"
           >
             {{ $t("labels.createQuiz") }}
           </v-btn>
           <v-btn
-            v-if="!isNotLandingPage"
             variant="elevated"
             color="primary"
             size="large"
-            :disabled="isNotLandingPage"
             :class="[
               'ma-2',
               'pa-2',
@@ -91,7 +89,6 @@ const { dark, toggleTheme } = useAppTheme();
 const route = useRoute();
 const { t } = useI18n();
 
-const isNotLandingPage = computed(() => route.path !== "/");
 const allowedRoutes = [
   "/",
   "/challenger-login",

@@ -37,6 +37,7 @@
             'rounded-ts-lg',
             'rounded-be-lg',
           ]"
+          :to="{ name: 'AdminRegistration' }"
         >
           {{ $t("labels.registerAsAssesor") }}
         </v-btn>
@@ -70,6 +71,7 @@
     </v-row>
   </v-container>
   <!-- About us -->
+
   <v-container id="about">
     <v-row class="align-center justify-space-between">
       <v-col>

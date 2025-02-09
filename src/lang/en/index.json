@@ -72,7 +72,11 @@
     "accuracy": "Accuracy",
     "createdAt": "Created At",
     "actions": "Actions",
-    "save": "Save"
+    "save": "Save",
+    "adminRegistartion": "Assessor Registration",
+    "adminLogin": "Assessor Login",
+    "userRegistration": "Challenger Registration",
+    "userLogin": "Challenger Login"
   },
   "lables": {
     "viewProfile": "View profile",
