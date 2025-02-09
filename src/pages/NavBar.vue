@@ -1,75 +1,30 @@
 <template>
   <v-app-bar
-    class="mr-3 mt-3 mb-3 pr-3 pt-3 pb-3"
+    v-if="showNavbar"
+    class="mr-3 mb-3 pr-3 pt-3 pb-3"
     :elevation="0"
     color="background"
   >
     <v-container>
       <v-row class="align-center jusitfy-space-between">
         <v-col class="mr-3 pr-3">
-          <div class="d-flex">
-            <v-img
-              height="30"
-              class="ma-2"
-              width="36"
-              max-width="36"
-              src="@/assets/science.png"
-            />
-            <v-app-bar-title
-              :class="[
-                'font-weight-bold',
-                'text-h5',
-                dark ? 'text-white' : 'logo-color',
-                'ma-2',
-              ]"
-              >Assesify</v-app-bar-title
-            >
-          </div>
+          <app-logo />
         </v-col>
         <v-col class="ml-5 pl-5">
           <div class="d-flex">
             <router-link
-              to="#"
+              v-for="item in navItems"
+              :key="item.id"
+              :to="item.route"
               :class="[
                 'text-decoration-none',
                 'font-weight',
                 'px-6',
-                dark ? 'text-white' : 'link-color',
+                dark ? 'text-white' : 'text-primary',
               ]"
-              >Home</router-link
             >
-            <router-link
-              to="#"
-              :class="[
-                'text-decoration-none',
-                'font-weight',
-                'px-6',
-                dark ? 'text-white' : 'link-color',
-              ]"
-              >Test</router-link
-            >
-            <router-link
-              to="#"
-              :class="[
-                'text-decoration-none',
-                'font-weight',
-                'd-flex',
-                'px-6',
-                dark ? 'text-white' : 'link-color',
-              ]"
-              >Assesify?</router-link
-            >
-            <router-link
-              to="#"
-              :class="[
-                'text-decoration-none',
-                'font-weight',
-                'px-6',
-                'd-flex',
-                dark ? 'text-white' : 'link-color',
-              ]"
-              >ContactUs</router-link
-            >
+              {{ item.name }}
+            </router-link>
           </div>
         </v-col>
         <v-col class="ml-12 pl-13">
@@ -79,25 +34,11 @@
             variant="text"
             class="mr-4"
             @click="toggleTheme"
-          >
-          </v-btn>
+          />
           <v-btn
+            v-if="!isNotLandingPage"
             size="large"
-            color="#1565c0"
-            variant="elevated"
-            :class="[
-              'ma-2',
-              'pa-2',
-              'text-subtitle-2',
-              'text-align-end',
-              'rounded-ts-lg',
-              'rounded-be-lg',
-            ]"
-            >Create Quiz</v-btn
-          >
-          <v-btn
-            size="large"
-            :color="dark ? '#1565c0' : '#1565c0'"
+            color="primary"
             variant="outlined"
             :class="[
               'ma-2',
@@ -107,8 +48,27 @@
               'rounded-ts-lg',
               'rounded-be-lg',
             ]"
-            >Attempt Quiz</v-btn
           >
+            {{ $t("labels.createQuiz") }}
+          </v-btn>
+          <v-btn
+            v-if="!isNotLandingPage"
+            variant="elevated"
+            color="primary"
+            size="large"
+            :disabled="isNotLandingPage"
+            :class="[
+              'ma-2',
+              'pa-2',
+              'text-subtitle-2',
+              'text-align-end',
+              'rounded-ts-lg',
+              'rounded-be-lg',
+            ]"
+            :to="{ name: 'StudentLogin' }"
+          >
+            {{ $t("labels.attemptQuiz") }}
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -116,16 +76,62 @@
 </template>
 
 <script setup lang="ts">
+interface Nav {
+  id: number;
+  name: string;
+  route: string;
+}
 import { useAppTheme } from "@/composables/useTheme";
+import { useRoute } from "vue-router";
+import { useI18n } from "vue-i18n";
+import { computed } from "vue";
+import AppLogo from "@/components/AppLogo.vue";
 
 const { dark, toggleTheme } = useAppTheme();
+const route = useRoute();
+const { t } = useI18n();
+
+const isNotLandingPage = computed(() => route.path !== "/");
+const allowedRoutes = [
+  "/",
+  "/challenger-login",
+  "/challenger-registration",
+  "/admin-login",
+  "/admin-registration",
+];
+const showNavbar = computed(() => allowedRoutes.includes(route.path));
+
+const navItems: Nav[] = [
+  {
+    id: 1,
+    name: t("labels.home"),
+    route: "/",
+  },
+  {
+    id: 2,
+    name: t("labels.test"),
+    route: "#",
+  },
+  {
+    id: 3,
+    name: t("labels.whyAssesify"),
+    route: "/#about",
+  },
+  {
+    id: 4,
+    name: t("labels.contactUs"),
+    route: "/#contact",
+  },
+];
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
 .link-color {
-  color: #0d47a1;
+  color: 3d4d7a;
 }
-.logo-color {
-  color: #1976d2;
+.font-poppins {
+  font-family: "Poppins", sans-serif;
 }
 </style>

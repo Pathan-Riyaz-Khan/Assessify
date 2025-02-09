@@ -4,16 +4,16 @@ export default {
   light: {
     dark: false,
     colors: {
-      primary: "#EA6D27",
-      secondary: "#101A24",
+      primary: "#233568",
+      secondary: "#0d47a1",
       background: "FAFAFA",
     },
   } ,
   dark: {
     dark: true,
     colors: {
-      primary: "#EA6D27",
-      secondary: "#101A24",
+      primary: "#1976d2",
+      secondary: "#0d47a1",
       background: "#121212",
     },
   } ,
