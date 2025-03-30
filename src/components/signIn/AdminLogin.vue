@@ -1,6 +1,18 @@
 <template>
   <v-container class="justify-center">
-    <v-form>
+    <div
+      v-if="wrongCredintal"
+      class="text-subtitle-1 text-medium-emphasis font-poppins text-danger"
+    >
+      <v-alert
+        closable
+        density="compact"
+        title="Password Error"
+        :text="invalidMessage"
+        type="error"
+      ></v-alert>
+    </div>
+    <v-form @submit.prevent="login()">
       <v-card
         max-width="400"
         width="100%"
@@ -28,32 +40,37 @@
             :class="[
               'font-poppins',
               'text-h6',
-              '',
               'd-block',
               dark ? '' : 'text-primary',
             ]"
           >
-            {{ $t("labels.userLogin") }}
+            {{ $t("labels.adminLogin") }}
           </div>
         </v-card-title>
         <v-card-text>
           <v-text-field
+            v-model="email"
             color="primary"
             density="compact"
             class="py-2"
             variant="outlined"
             label="Email"
             type="email"
+            :rules="rules"
           />
           <v-text-field
+            v-model="password"
             color="primary"
             density="compact"
-            :append-inner-icon="passwordIcon"
+            :append-inner-icon="
+              showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+            "
             class="pt-2"
             variant="outlined"
             label="Password"
-            :type="passwordType"
-            @click:append-inner="showOrHidePassword"
+            :type="showPassword ? 'text' : 'password'"
+            @click:append-inner="showPassword = !showPassword"
+            :rules="rules"
           />
           <router-link
             class="text-subtitle-2 text-medium-emphasis pb-2 text-decoration-none"
@@ -69,6 +86,7 @@
             color="primary"
             class="mx-auto"
             block
+            type="submit"
           >
             {{ $t("labels.signInLabel") }}
           </v-btn>
@@ -77,7 +95,7 @@
           {{ $t("messages.doNotHaveAnAccount") }}
           <router-link
             class="text-subtitle-2 text-medium-emphasis pb-2 text-decoration-none"
-            to="/challenger-registration"
+            to="/admin-registration"
           >
             {{ $t("labels.signUp") }}
           </router-link>
@@ -89,22 +107,39 @@
 
 <script setup lang="ts">
 import { useAppTheme } from "@/composables/useTheme";
-const { dark } = useAppTheme();
+import { useI18n } from "vue-i18n";
 import { ref } from "vue";
-const passwordIcon = ref("mdi-eye-off-outline");
-const passwordIconState = ref(true);
-const passwordType = ref("password");
+import { useRouter } from "vue-router";
+import AdminService from "@/services/adminService";
+import type { AuthResponse } from "@/types/response/auth";
 
-const showOrHidePassword = function () {
-  if (passwordIconState.value) {
-    passwordIcon.value = "mdi-eye-outline";
-    passwordIconState.value = false;
-    passwordType.value = "text";
-  } else {
-    passwordIcon.value = "mdi-eye-off-outline";
-    passwordIconState.value = true;
-    passwordType.value = "password";
-  }
+const { dark } = useAppTheme();
+
+const showPassword = ref(false);
+const router = useRouter();
+
+const { t } = useI18n();
+const rules = [(v: unknown) => !!v || t("messages.thisFieldIsRequired")];
+const invalidMessage = t("messages.invalidMessage");
+
+const email = ref("");
+const password = ref("");
+const wrongCredintal = ref(false);
+
+const login = function () {
+  const admin: AuthResponse = {
+    email: email.value,
+    password: password.value,
+  };
+  console.log(admin);
+  const adminService = new AdminService();
+  adminService.login(admin).then((response) => {
+    if (response.status === 200) {
+      router.push("/admin/dashboard");
+    } else {
+      wrongCredintal.value = true;
+    }
+  });
 };
 </script>
 

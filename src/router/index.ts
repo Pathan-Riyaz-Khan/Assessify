@@ -20,83 +20,121 @@ const routes: RouteRecordRaw[] = [
   {
     name: "StudentLogin",
     path: "/challenger-login",
-    component: () => import("@/components/ChallengerLogin.vue"),
+    component: () => import("@/components/signIn/ChallengerLogin.vue"),
   },
   {
     name: "ChallengerRegistration",
     path: "/challenger-registration",
-    component: () => import("@/components/ChallengerRegistration.vue"),
+    component: () => import("@/components/signUp/ChallengerRegistration.vue"),
   },
   {
     name: "AdminRegistration",
     path: "/admin-registration",
-    component: () => import("@/pages/AdminRegistration.vue"),
+    component: () => import("@/components/signUp/AdminRegistration.vue"),
   },
   {
     name: "AdminLogin",
     path: "/admin-login",
-    component: () => import("@/pages/AdminLogin.vue"),
+    component: () => import("@/components/signIn/AdminLogin.vue"),
   },
   {
     name: "Assessor",
     path: "/admin",
     redirect: "/admin/dashboard",
-    component: () => import("@/pages/AdminDefault.vue"),
+    component: () => import("@/pages/default/AdminDefault.vue"),
     children: [
       {
         name: "AssessorDashboard",
         path: "dashboard",
-        component: () => import("@/components/AssessorDashboard.vue"),
+        component: () =>
+          import("@/components/AdminComponents/AssessorDashboard.vue"),
       },
       {
         name: "AssessorLibrary",
         path: "library",
         redirect: "library/createdByMe",
-        component: () => import("@/pages/AssessorLibrary.vue"),
+        component: () =>
+          import("@/components/AdminComponents/AssessorLibrary.vue"),
         children: [
           {
             name: "CreatedByMe",
             path: "createdByMe",
-            component: () => import("@/components/CreatedByMe.vue"),
+            component: () =>
+              import("@/components/AdminComponents/CreatedByMe.vue"),
           },
           {
             name: "PreviouslyUsed",
             path: "previouslyUsed",
-            component: () => import("@/components/PreviouslyUsed.vue"),
+            component: () =>
+              import("@/components/AdminComponents/PreviouslyUsed.vue"),
           },
           {
             name: "LikedByMe",
             path: "likedByMe",
-            component: () => import("@/components/LikedByMe.vue"),
+            component: () =>
+              import("@/components/AdminComponents/LikedByMe.vue"),
           },
           {
             name: "SharedWithMe",
             path: "sharedWithMe",
-            component: () => import("@/components/SharedWithMe.vue"),
-          },
-          {
-            name: "AllMyContent",
-            path: "allMyContent",
-            component: () => import("@/components/AllMyContent.vue"),
+            component: () =>
+              import("@/components/AdminComponents/SharedWithMe.vue"),
           },
         ],
       },
       {
         name: "AssessorReports",
         path: "reports",
-        component: () => import("@/pages/AssessorReports.vue"),
+
+        component: () =>
+          import("@/components/AdminComponents/AssessorReports.vue"),
       },
     ],
   },
   {
     name: "QuizCreation",
     path: "/admin/create",
-    component: () => import("@/pages/QuizCreation.vue"),
+    component: () => import("@/pages/quizPages/QuizCreation.vue"),
   },
   {
     name: "Questions",
-    path: "/questions",
-    component: () => import("@/pages/Questions.vue"),
+    path: "/quizzes/questions",
+    component: () => import("@/pages/questionPages/QuestionList.vue"),
+  },
+  {
+    name: "User",
+    path: "/user",
+    redirect: "/user/dashboard",
+    component: () => import("@/pages/default/UserDefault.vue"),
+    children: [
+      {
+        name: "UserDashboard",
+        path: "dashboard",
+        component: () =>
+          import("@/components/UserComponents/UserDashboard.vue"),
+      },
+      {
+        name: "UserActivity",
+        path: "activity",
+        component: () => import("@/components/UserComponents/UserActivity.vue"),
+      },
+      {
+        name: "UserReport",
+        path: "report",
+        component: () => import("@/components/UserComponents/UserReport.vue"),
+      },
+    ],
+  },
+  {
+    name: "UserQuizPreview",
+    path: "/user-quiz-preview",
+    component: () => import("@/pages/quizPages/UserQuizPreview.vue"),
+  },
+  {
+    name: "AssessorQuizReport",
+    path: "/admin/quiz-report",
+    component: () =>
+      import("@/components/AdminComponents/AssessorQuizReport.vue"),
   },
 ];
 const router = createRouter({

@@ -40,8 +40,6 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
-const { t } = useI18n();
 interface Quiz {
   id: number;
   title: string;
@@ -50,42 +48,15 @@ interface Quiz {
   createdAt: string;
 }
 
-import QuizNotFound from "@/pages/QuizNotFound.vue";
+import QuizNotFound from "@/pages/quizPages/QuizNotFound.vue";
 
-const quizItems: Quiz[] = [
-  {
-    id: 1,
-    title: "Java",
-    noOfQuestions: "20 Questions0",
-    assessorName: "Siva Krishna",
-    createdAt: "29 January",
-  },
-  {
-    id: 2,
-    title: "DBMs",
-    noOfQuestions: "20 Questions0",
-    assessorName: "Siva Krishna",
-    createdAt: "10 January",
-  },
-  {
-    id: 3,
-    title: "Data Structures",
-    noOfQuestions: "20 Questions0",
-    assessorName: "Siva Krishna",
-    createdAt: "20 January",
-  },
-  {
-    id: 4,
-    title: "Python",
-    noOfQuestions: "20 Questions0",
-    assessorName: "Siva Krishna",
-    createdAt: "25 January",
-  },
-];
+const quizItems: Quiz[] = [];
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
 
 const notFoundMessage = {
-  notFoundMsg: t("messages.createdNotFound"),
-  subTitle: t("messages.createdNotFoundSubTitle"),
+  notFoundMsg: t("messages.likedNotFound"),
+  subTitle: t("messages.likedNotFoundSubTitle"),
 };
 </script>
 

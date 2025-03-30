@@ -46,7 +46,11 @@
             </span>
           </template>
           <v-card-actions>
-            <v-btn color="primary" :to="creationType.route">
+            <v-btn
+              color="primary"
+              :to="creationType.route"
+              style="text-transform: none"
+            >
               {{ creationType.buttonName }}
             </v-btn>
           </v-card-actions>
@@ -84,7 +88,11 @@
             </span>
           </template>
           <v-card-actions>
-            <v-btn color="primary">
+            <v-btn
+              color="primary"
+              style="text-transform: none"
+              @click="navigateToQuiz(recentActivity.id)"
+            >
               {{ recentActivity.buttonName }}
             </v-btn>
           </v-card-actions>
@@ -104,8 +112,12 @@ interface creation {
   route: string;
 }
 import { useAppTheme } from "@/composables/useTheme";
-const { dark } = useAppTheme();
 import { useI18n } from "vue-i18n";
+import { useRouter } from "vue-router";
+import { computed } from "vue";
+import { useQuizStore } from "@/store/quiz";
+
+const { dark } = useAppTheme();
 const { t } = useI18n();
 
 const creationTypes: creation[] = [
@@ -135,32 +147,28 @@ const creationTypes: creation[] = [
   },
 ];
 
-const recentActivites: creation[] = [
-  {
-    id: 1,
-    title: t("labels.quizName"),
-    subTitle: "created by Riyaz",
+const quizStore = useQuizStore();
+
+const quizzes = computed(function () {
+  return quizStore.quizzes;
+});
+
+const recentActivites = computed(() => {
+  return (quizzes.value ?? []).slice(-3).map((quiz) => ({
+    id: quiz.id,
+    title: quiz.title,
+    subTitle: `created by Riyaz`,
     iconName: "mdi-alpha-q-circle-outline",
     buttonName: t("labels.viewQuiz"),
     route: "#",
-  },
-  {
-    id: 2,
-    title: t("labels.quizName"),
-    subTitle: "created by Riyaz",
-    iconName: "mdi-alpha-q-circle-outline",
-    buttonName: t("labels.viewQuiz"),
-    route: "#",
-  },
-  {
-    id: 3,
-    title: t("labels.quizName"),
-    subTitle: "created by Riyaz",
-    iconName: "mdi-alpha-q-circle-outline",
-    buttonName: t("labels.viewQuiz"),
-    route: "#",
-  },
-];
+  }));
+});
+
+const router = useRouter();
+
+const navigateToQuiz = (id: number) => {
+  router.push({ path: "/quizzes/questions", query: { quizId: id } });
+};
 </script>
 
 <style>

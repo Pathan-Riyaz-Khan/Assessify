@@ -17,7 +17,12 @@
             :key="item.id"
             :prepend-icon="item.iconName"
             :title="item.title"
-            class="text-primary font-poppins custom-list-item mb-1"
+            :class="[
+              dark ? '' : 'text-primary',
+              'font-poppins',
+              'custom-list-item',
+              'mb-1',
+            ]"
             :to="item.route"
           />
         </v-list>
@@ -85,16 +90,10 @@ const listItems: List[] = [
     iconName: "mdi-account-group-outline",
     route: "/admin/library/sharedWithMe",
   },
-  {
-    id: 5,
-    title: t("labels.allMycontent"),
-    iconName: "mdi-delete",
-    route: "/admin/library/allMyContent",
-  },
 ];
 </script>
 
-<style>
+<style socped>
 .custom-select {
   max-width: 180px;
 }

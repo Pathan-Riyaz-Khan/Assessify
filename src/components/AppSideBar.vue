@@ -26,8 +26,9 @@
             variant="elevated"
             class="pl-8 ma-2 custom-button"
             color="primary"
+            :to="create == 'Create' ? '/admin/create' : ''"
           >
-            Create
+            {{ create }}
           </v-btn>
           <v-list density="compact">
             <v-list-item
@@ -35,7 +36,12 @@
               :key="listItem.id"
               :prepend-icon="listItem.iconName"
               :title="listItem.title"
-              class="text-primary font-poppins my-2"
+              :class="[
+                dark ? '' : 'text-primary',
+                'font-poppins',
+                'custom-list-item',
+                'mb-1',
+              ]"
               :to="listItem.route"
             />
           </v-list>
@@ -74,58 +80,24 @@
 </template>
 
 <script setup lang="ts">
+import { useAppTheme } from "@/composables/useTheme";
+const { dark, toggleTheme } = useAppTheme();
+import type { PropType } from "vue";
+
 interface List {
   id: number;
   title: string;
   iconName: string;
   route: string;
 }
-import { useAppTheme } from "@/composables/useTheme";
-const { dark, toggleTheme } = useAppTheme();
-import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
-
-const listItems: List[] = [
-  {
-    id: 1,
-    title: t("labels.explore"),
-    iconName: "mdi-home",
-    route: "/admin/dashboard",
-  },
-  {
-    id: 2,
-    title: t("labels.library"),
-    iconName: "mdi-notebook-edit",
-    route: "/admin/library",
-  },
-  {
-    id: 3,
-    title: t("labels.reports"),
-    iconName: "mdi-chart-bubble",
-    route: "/admin/reports",
-  },
-];
-const menuListItems: List[] = [
-  {
-    id: 1,
-    title: t("lables.viewProfile"),
-    iconName: "mdi-account-circle-outline",
-    route: "#",
-  },
-  {
-    id: 2,
-    title: t("lables.settings"),
-    iconName: "mdi-cog-outline",
-    route: "#",
-  },
-  {
-    id: 3,
-    title: t("labels.logout"),
-    iconName: "mdi-logout",
-    route: "#",
-  },
-];
+defineProps({
+  // eslint-disable-next-line vue/require-default-prop
+  listItems: Array as PropType<List[]>,
+  // eslint-disable-next-line vue/require-default-prop
+  menuListItems: Array as PropType<List[]>,
+  create: String,
+});
 </script>
 
 <style>

@@ -48,15 +48,15 @@ interface Quiz {
   createdAt: string;
 }
 
-import QuizNotFound from "@/pages/QuizNotFound.vue";
+import QuizNotFound from "@/pages/quizPages/QuizNotFound.vue";
 
 const quizItems: Quiz[] = [];
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 
 const notFoundMessage = {
-  notFoundMsg: t("messages.likedNotFound"),
-  subTitle: t("messages.likedNotFoundSubTitle"),
+  notFoundMsg: t("messages.sharedWithMeNotFound"),
+  subTitle: t("messages.previouslyUsedNotFoundSubTitle"),
 };
 </script>
 
