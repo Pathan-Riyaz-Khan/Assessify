@@ -2,6 +2,8 @@ import type { QuestionRequest } from "@/types/request/question";
 import type { QuestionResponse } from "@/types/response/question";
 class QuestionService {
   baseUrl = import.meta.env.VITE_API_BASE_URL;
+  token = localStorage.getItem("token") || "";
+
   async GetQuestions(quizId: number): Promise<QuestionResponse[]> {
     try {
       const response = await fetch(
@@ -10,6 +12,8 @@ class QuestionService {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + this.token || "",
+
             Accept: "application/json",
           },
         }
@@ -32,6 +36,7 @@ class QuestionService {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + this.token || "",
             Accept: "application/json",
           },
           body: JSON.stringify(question),
@@ -57,6 +62,7 @@ class QuestionService {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: "Bearer " + this.token || "",
             Accept: "application/json",
           },
           body: JSON.stringify(question),
@@ -75,6 +81,7 @@ class QuestionService {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + this.token || "",
           Accept: "application/json",
         },
       });

@@ -119,6 +119,8 @@ const onSubmit = async function () {
 
   const start = new Date(startTime.value);
   const end = new Date(endTime.value);
+  console.log("Start time:", start);
+  console.log("End time:", end);
 
   if (isNaN(start.getTime()) || isNaN(end.getTime())) {
     showAlert.value = true;
@@ -138,15 +140,33 @@ const onSubmit = async function () {
     return;
   }
 
+  const token = localStorage.getItem("token");
+
+  const getId = () => {
+    if (token) {
+      const payloadBase64 = token.split(".")[1];
+      const payloadJson = atob(payloadBase64);
+      const payload = JSON.parse(payloadJson);
+      return payload.id;
+    }
+    return 0;
+  };
+
+  function formatDateToISTString(date: Date): string {
+    const istDate = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+    return istDate.toISOString().slice(0, 19); // "YYYY-MM-DDTHH:mm:ss"
+  }
+
   const quiz: QuizRequest = {
     Title: quizName.value,
     Description: description.value,
-    AdminId: 2,
+    AdminId: getId(),
     Password: password.value,
-    StartTime: start,
-    EndTime: end,
+    StartTime: formatDateToISTString(start),
+    EndTime: formatDateToISTString(end),
   };
-
+  console.log("Quiz object:", quiz);
+  console.log("josn quiz:", JSON.stringify(quiz));
   const quizService = new QuizService();
   try {
     await quizService.createQuiz(quiz).then((res) => {
@@ -161,5 +181,6 @@ const router = useRouter();
 
 const navigateToQuestion = function (id: number) {
   router.push({ path: "/quizzes/questions", query: { quizId: id } });
+  console.log("Quiz created with ID:", id);
 };
 </script>

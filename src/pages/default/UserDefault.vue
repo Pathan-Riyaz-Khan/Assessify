@@ -1,10 +1,6 @@
 <template>
-  <v-container>
-    <app-side-bar
-      :listItems="listItems"
-      :menuListItems="menuListItems"
-      :create="create"
-    />
+  <v-container fluid>
+    <app-side-bar :listItems="listItems" :create="create" />
     <router-view />
   </v-container>
 </template>
@@ -22,14 +18,21 @@ import AppSideBar from "@/components/AppSideBar.vue";
 import { useUserStore } from "@/store/user";
 import { onMounted } from "vue";
 import UserService from "@/services/userService";
+import { useRouter } from "vue-router";
 
 const userService = new UserService();
 const userStore = useUserStore();
+const router = useRouter();
 
 onMounted(async function () {
-  await userService.GetUser(2).then((response) => {
-    userStore.setUser(response);
-  });
+  const user = localStorage.getItem("token");
+  if (user == null) {
+    router.push({ path: "/challenger-login" });
+  } else {
+    await userService.GetUser().then((response) => {
+      userStore.setUser(response);
+    });
+  }
 });
 
 const { t } = useI18n();
@@ -54,26 +57,6 @@ const listItems: List[] = [
     title: t("labels.reports"),
     iconName: "mdi-chart-bubble",
     route: "/user/report",
-  },
-];
-const menuListItems: List[] = [
-  {
-    id: 1,
-    title: t("lables.viewProfile"),
-    iconName: "mdi-account-circle-outline",
-    route: "#",
-  },
-  {
-    id: 2,
-    title: t("lables.settings"),
-    iconName: "mdi-cog-outline",
-    route: "#",
-  },
-  {
-    id: 3,
-    title: t("labels.logout"),
-    iconName: "mdi-logout",
-    route: "#",
   },
 ];
 </script>

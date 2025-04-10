@@ -20,15 +20,28 @@ import { useI18n } from "vue-i18n";
 import QuizService from "@/services/quizService";
 import { useQuizStore } from "@/store/quiz";
 import { onMounted } from "vue";
+import { useRouter } from "vue-router";
+import AdminService from "@/services/adminService";
+import { useAdminStore } from "@/store/admin";
 
 const quizService = new QuizService();
-
 const quizStore = useQuizStore();
+const adminService = new AdminService();
+const adminStore = useAdminStore();
 
 onMounted(async () => {
-  await quizService.GetQuizzes().then((response) => {
-    quizStore.setQuizzes(response);
-  });
+  const admin = localStorage.getItem("token");
+  const router = useRouter();
+  if (admin == null) {
+    router.push({ path: "/admin-login" });
+  } else {
+    await quizService.GetQuizzes().then((response) => {
+      quizStore.setQuizzes(response);
+    });
+    await adminService.GetAdmin().then((response) => {
+      adminStore.setAdmin(response);
+    });
+  }
 });
 
 const { t } = useI18n();

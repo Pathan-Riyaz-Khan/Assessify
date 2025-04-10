@@ -71,7 +71,10 @@
       </v-col>
     </v-row>
     <v-row class="align-center justify-space-between">
-      <v-col class="d-flex">
+      <v-col v-if="recentActivites.length == 0">
+        <quiz-not-found :notFoundObject="notFoundMessage" />
+      </v-col>
+      <v-col class="d-flex" v-else>
         <v-card
           v-for="recentActivity in recentActivites"
           :key="recentActivity.id"
@@ -116,10 +119,41 @@ import { useI18n } from "vue-i18n";
 import { useRouter } from "vue-router";
 import { computed } from "vue";
 import { useQuizStore } from "@/store/quiz";
+import { useAdminStore } from "@/store/admin";
+import QuizNotFound from "@/pages/quizPages/QuizNotFound.vue";
 
 const { dark } = useAppTheme();
 const { t } = useI18n();
 
+const quizStore = useQuizStore();
+const adminStore = useAdminStore();
+
+const quizzes = computed(function () {
+  return quizStore.quizzes;
+});
+const admin = computed(function () {
+  return adminStore.admin;
+});
+const recentActivites = computed(() => {
+  return (quizzes.value ?? []).slice(-3).map((quiz) => ({
+    id: quiz.id,
+    title: quiz.title,
+    subTitle: "created by " + admin.value.name,
+    iconName: "mdi-alpha-q-circle-outline",
+    buttonName: t("labels.viewQuiz"),
+    route: "#",
+  }));
+});
+
+const notFoundMessage = {
+  notFoundMsg: t("messages.createdNotFound"),
+  subTitle: t("messages.createdNotFoundSubTitle"),
+};
+const router = useRouter();
+
+const navigateToQuiz = (id: number) => {
+  router.push({ path: "/quizzes/questions", query: { quizId: id } });
+};
 const creationTypes: creation[] = [
   {
     id: 1,
@@ -146,29 +180,6 @@ const creationTypes: creation[] = [
     route: "/admin/create",
   },
 ];
-
-const quizStore = useQuizStore();
-
-const quizzes = computed(function () {
-  return quizStore.quizzes;
-});
-
-const recentActivites = computed(() => {
-  return (quizzes.value ?? []).slice(-3).map((quiz) => ({
-    id: quiz.id,
-    title: quiz.title,
-    subTitle: `created by Riyaz`,
-    iconName: "mdi-alpha-q-circle-outline",
-    buttonName: t("labels.viewQuiz"),
-    route: "#",
-  }));
-});
-
-const router = useRouter();
-
-const navigateToQuiz = (id: number) => {
-  router.push({ path: "/quizzes/questions", query: { quizId: id } });
-};
 </script>
 
 <style>

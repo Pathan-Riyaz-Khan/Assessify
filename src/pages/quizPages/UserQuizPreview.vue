@@ -18,8 +18,27 @@
       </v-col>
       <v-spacer />
       <v-col cols="4" class="d-flex justify-end">
+        <v-btn
+          :variant="answered ? 'elevated' : 'outlined'"
+          color="primary"
+          class="mr-2"
+          style="text-transform: none"
+          @click="getAnsweredQuestions()"
+        >
+          {{ $t("labels.answered") }}
+        </v-btn>
+        <v-btn
+          :variant="!answered ? 'elevated' : 'outlined'"
+          color="primary"
+          class="mr-2"
+          style="text-transform: none"
+          @click="getUnAnsweredQuestions()"
+        >
+          {{ $t("labels.unAnswered") }}
+        </v-btn>
+
         <v-btn variant="tonal" color="success" style="text-transform: none">
-          Actual Option
+          {{ $t("labels.actualOption") }}
         </v-btn>
         <v-btn
           variant="tonal"
@@ -27,141 +46,164 @@
           style="text-transform: none"
           class="pl-4 ml-4"
         >
-          Selected Option
+          {{ $t("labels.selectedOption") }}
         </v-btn>
       </v-col>
     </v-row>
-
-    <div class="quiz-list-container mt-2">
-      <v-virtual-scroll :items="questions" class="quiz-scroll">
-        <template v-slot:default="{ item, index }">
-          <v-card
-            :key="item.id"
-            max-width="100%"
-            max-height="150px"
-            class="d-flex flex-row align-center mb-2"
-            elevation="2"
+    <v-row v-if="presentDate < endTime">
+      <v-col>
+        <div
+          :class="[
+            'text-h6',
+            dark ? 'text-white' : 'text-primary',
+            'font-weight-bold',
+            'text-center',
+          ]"
+        >
+          {{ $t("messages.timeLeftAlert") }}
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-else-if="!answered && unAnsweredQuestions.length === 0">
+      <v-col>
+        <div
+          :class="[
+            'text-h6',
+            dark ? 'text-white' : 'text-primary',
+            'font-weight-bold',
+            'text-center',
+          ]"
+        >
+          {{ $t("messages.unAnsweredQuestion") }}
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-else-if="answered && userAttemptedquestions.length === 0">
+      <v-col>
+        <div
+          :class="[
+            'text-h6',
+            dark ? 'text-white' : 'text-primary',
+            'font-weight-bold',
+            'text-center',
+          ]"
+        >
+          {{ $t("messages.answeredQuestions") }}
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-else>
+      <v-col
+        v-for="(item, index) in answered
+          ? userAttemptedquestions
+          : unAnsweredQuestions"
+        :key="item.id"
+        cols="12"
+      >
+        <v-card :key="item.id" class="mb-2" elevation="2">
+          <v-card-title
+            :class="['font-weight-bold', dark ? 'text-white' : 'text-primary']"
           >
-            <v-card-text class="flex-grow-1">
-              <v-card-title
-                :class="[
-                  'font-weight-bold',
-                  dark ? 'text-white' : 'text-primary',
-                ]"
-              >
-                {{ index + 1 + ". " + item.text }}
-              </v-card-title>
-              <div class="d-flex flex-wrap">
-                <v-card-subtitle
-                  v-for="option in item.options"
-                  :key="option.id"
-                >
-                  <v-btn
-                    variant="tonal"
-                    style="
-                      text-transform: none;
-                      margin-right: 4px;
-                      margin-bottom: 6px;
-                    "
-                    classs="mt-2 mb-2"
-                    :color="getColorOfOption(option, item.selectedOption)"
-                    >{{ option.text }}</v-btn
-                  >
-                </v-card-subtitle>
-              </div>
-            </v-card-text>
-          </v-card>
-        </template>
-      </v-virtual-scroll>
-    </div>
+            {{ index + 1 + ". " + item.text }}
+          </v-card-title>
+          <v-card-text class="d-flex flex-wrap">
+            <v-btn
+              v-for="option in item.options"
+              :key="option.id"
+              variant="tonal"
+              class="ma-1 text-none"
+              :color="
+                answered
+                  ? getColorOfOption(option, item.selectedOption)
+                  : getColorOfOptionForUnanswered(option)
+              "
+            >
+              {{ option.text }}
+            </v-btn>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
 <script setup lang="ts">
 import { useAppTheme } from "@/composables/useTheme";
 import { useUserStore } from "@/store/user";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import UserService from "@/services/userService";
 import { useRouter } from "vue-router";
 import { onMounted } from "vue";
+import QuestionService from "@/services/questionService";
+import { useQuestionStore } from "@/store/questions";
 
 const { dark } = useAppTheme();
 
 const userStore = useUserStore();
 const userService = new UserService();
+const questionStore = useQuestionStore();
+const questionService = new QuestionService();
 const quizId = useRouter().currentRoute.value.query.quizId;
 
 const parsedQuizId = quizId ? Number(quizId) : 0;
-const quizName = computed(() => {
-  return userStore.user?.quizzes?.find((quiz) => quiz.id === parsedQuizId)
-    ?.title;
+const quiz = computed(() => {
+  return userStore.user?.quizzes?.find((quiz) => quiz.id === parsedQuizId);
 });
 
+const quizName = computed(() => {
+  return quiz.value?.title;
+});
+
+const presentDate = new Date();
+const endTime = new Date(quiz.value?.endTime || 0);
+
 onMounted(async function () {
-  await userService.GetUserAttemptedQuestions(2, parsedQuizId).then((res) => {
+  await userService.GetUserAttemptedQuestions(parsedQuizId).then((res) => {
     userStore.setUserAttemptedQuestions(res);
+  });
+  await questionService.GetQuestions(parsedQuizId).then((res) => {
+    questionStore.setQuestions(res);
   });
 });
 
-const questions = computed(() => {
-  console.log(userStore.userAttemtedQuestions);
+const userAttemptedquestions = computed(() => {
   return userStore.userAttemtedQuestions;
 });
-// const questions = [
-//   {
-//     id: 3,
-//     text: "Full form of API",
-//     options: [
-//       { id: 1, text: "Application Programming Inheritance", isCorrect: false },
-//       { id: 2, text: "Application platfrom Inheritance", isCorrect: false },
-//       { id: 3, text: "Application Programming Interface", isCorrect: true },
-//       { id: 4, text: "Application Platfrom Interface", isCorrect: false },
-//     ],
-//     selectedOption: "Application Programming Interface",
-//   },
-//   {
-//     id: 4,
-//     text: "Which HTTP method is used to retrieve data?",
-//     options: [
-//       { id: 5, text: "POST", isCorrect: false },
-//       { id: 6, text: "GET", isCorrect: true },
-//     ],
-//     selectedOption: "GET",
-//   },
-//   {
-//     id: 5,
-//     text: "What is the main purpose of an API",
-//     options: [
-//       { id: 7, text: "To store data", isCorrect: false },
-//       {
-//         id: 8,
-//         text: "To enable communication between software",
-//         isCorrect: true,
-//       },
-//     ],
-//     selectedOption: "To enable communication between software",
-//   },
-//   {
-//     id: 6,
-//     text: "Which status code means Not Found",
-//     options: [
-//       { id: 9, text: "404", isCorrect: true },
-//       { id: 10, text: "500", isCorrect: false },
-//       { id: 11, text: "200", isCorrect: false },
-//       { id: 12, text: "201", isCorrect: false },
-//     ],
-//     selectedOption: "500",
-//   },
-//   {
-//     id: 7,
-//     text: "Which format is commonly used for API data exchange",
-//     options: [
-//       { id: 11, text: "HTML", isCorrect: false },
-//       { id: 12, text: "SQL", isCorrect: true },
-//     ],
-//     selectedOption: "SQL",
-//   },
-// ];
+
+const quizQuestions = computed(() => {
+  return questionStore.questions.map((question) => ({
+    ...question,
+    selectedOption: "", // Add a default selectedOption property
+  }));
+});
+
+const unAnsweredQuestions = ref<
+  {
+    id: number;
+    text: string;
+    quizId: number;
+    options: { id: number; text: string; isCorrect: boolean }[];
+    selectedOption: string;
+  }[]
+>([]);
+
+const getAnsweredQuestions = () => {
+  answered.value = true;
+  console.log(userAttemptedquestions.value);
+};
+
+const getUnAnsweredQuestions = () => {
+  answered.value = false;
+  unAnsweredQuestions.value = quizQuestions.value.filter((question) => {
+    for (const userAttemptedquestion of userAttemptedquestions.value) {
+      if (userAttemptedquestion.id === question.id) {
+        return false;
+      }
+    }
+    return true;
+  });
+};
+const answered = ref(true);
 
 const getColorOfOption = function (
   option: { text: string; isCorrect: boolean },
@@ -174,6 +216,16 @@ const getColorOfOption = function (
   } else if (option.text !== selectedOption && option.isCorrect) {
     return "success";
   }
-  return "warning";
+  return "orange";
+};
+
+const getColorOfOptionForUnanswered = (option: {
+  text: string;
+  isCorrect: boolean;
+}) => {
+  if (option.isCorrect) {
+    return "success";
+  }
+  return "orange";
 };
 </script>

@@ -3,6 +3,6 @@ export interface QuizRequest {
   Description: string;
   AdminId: number;
   Password: string;
-  StartTime: Date;
-  EndTime: Date;
+  StartTime: string;
+  EndTime: string;
 }

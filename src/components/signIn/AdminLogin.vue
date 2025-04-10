@@ -10,7 +10,7 @@
         title="Password Error"
         :text="invalidMessage"
         type="error"
-      ></v-alert>
+      />
     </div>
     <v-form @submit.prevent="login()">
       <v-card
@@ -126,15 +126,16 @@ const email = ref("");
 const password = ref("");
 const wrongCredintal = ref(false);
 
-const login = function () {
+const login = async function () {
   const admin: AuthResponse = {
     email: email.value,
     password: password.value,
   };
   console.log(admin);
   const adminService = new AdminService();
-  adminService.login(admin).then((response) => {
-    if (response.status === 200) {
+  await adminService.login(admin).then((response) => {
+    if (response.title != "Unauthorized") {
+      localStorage.setItem("token", response.token);
       router.push("/admin/dashboard");
     } else {
       wrongCredintal.value = true;

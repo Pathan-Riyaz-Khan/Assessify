@@ -28,7 +28,13 @@
     "noRecentActivities": "You have not attempted any Quiz",
     "invalidMessage": "Email and/or password are Invalid",
     "questionDeletionAlert": "Are you sure! Want to permanently delete question.",
-    "joinQuizError": "The quiz code or password you entered is incorrect. Please double-check your credentials and try again."
+    "joinQuizError": "The quiz code or password you entered is incorrect. Please double-check your credentials and try again.",
+    "currentQuestion": "Current Question",
+    "notAttempted": "Not Attempted",
+    "invalidEmail": "Invalid Email",
+    "timeLeftAlert": "There is still time remaining to view your answers.",
+    "unAnsweredQuestion": "Hurray! You have Attempted All Questions.",
+    "answeredQuestions": "You have not even attempted a single question."
   },
   "labels": {
     "assesify": "Assesify",
@@ -96,10 +102,24 @@
     "noOfQuestions": "No of Questions",
     "score": "Score",
     "email": "Email",
-    "sequenceNumber": "S.No"
+    "sequenceNumber": "S.No",
+    "startQuiz": "Start Quiz",
+    "previous": "previous",
+    "submit": "submit",
+    "updateQuiz": "Update Quiz",
+    "viewQuestion": "View Questions",
+    "deleteQuiz": "Delete Quiz",
+    "actualOption": "Actual Option",
+    "selectedOption": "Selected Option",
+    "answered": "Answered",
+    "unAnswered": "Unanswered"
   },
   "lables": {
     "viewProfile": "View profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "next": "next"
+  },
+  "messags": {
+    "attempted": "Attempted"
   }
 }

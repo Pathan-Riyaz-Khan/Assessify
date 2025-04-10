@@ -72,34 +72,6 @@ const handleCardClick = function (id: number) {
   router.push({ path: "/user-quiz-preview", query: { quizId: id } });
 };
 
-// const recentActivites = [
-//   { id: 1, title: "Mathematics", noOfQuestions: "10", accuracy: 80 },
-//   { id: 2, title: "English", noOfQuestions: "10", accuracy: 70 },
-//   { id: 3, title: "Science", noOfQuestions: "5", accuracy: 40 },
-//   { id: 4, title: "Python", noOfQuestions: "5", accuracy: 70 },
-//   { id: 5, title: "C", noOfQuestions: "20", accuracy: 80 },
-//   { id: 6, title: "C++", noOfQuestions: "10", accuracy: 90 },
-//   { id: 7, title: "Java", noOfQuestions: "15", accuracy: 85 },
-//   { id: 8, title: "SQL", noOfQuestions: "12", accuracy: 75 },
-//   { id: 9, title: "JavaScript", noOfQuestions: "8", accuracy: 65 },
-//   { id: 10, title: "Data Structures", noOfQuestions: "25", accuracy: 95 },
-//   { id: 11, title: "Algorithms", noOfQuestions: "20", accuracy: 85 },
-//   { id: 12, title: "Operating Systems", noOfQuestions: "10", accuracy: 60 },
-//   { id: 13, title: "Computer Networks", noOfQuestions: "12", accuracy: 70 },
-//   { id: 14, title: "Machine Learning", noOfQuestions: "10", accuracy: 50 },
-//   {
-//     id: 15,
-//     title: "Artificial Intelligence",
-//     noOfQuestions: "10",
-//     accuracy: 55,
-//   },
-//   { id: 16, title: "Cyber Security", noOfQuestions: "10", accuracy: 65 },
-//   { id: 17, title: "Cloud Computing", noOfQuestions: "8", accuracy: 75 },
-//   { id: 18, title: "Blockchain", noOfQuestions: "6", accuracy: 60 },
-//   { id: 19, title: "Big Data", noOfQuestions: "10", accuracy: 70 },
-//   { id: 20, title: "IoT", noOfQuestions: "10", accuracy: 80 },
-// ];
-
 const getcolor = function (accuracy: number) {
   if (accuracy >= 80) {
     return "success";

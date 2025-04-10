@@ -25,6 +25,7 @@
           variant="elevated"
           class="custom-button"
           color="primary"
+          to="/admin/create"
         >
           Create Quiz
         </v-btn>

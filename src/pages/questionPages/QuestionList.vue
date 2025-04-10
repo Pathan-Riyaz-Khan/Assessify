@@ -30,6 +30,7 @@
             {{ questions.length + " " + $t("labels.questions") }}
           </div>
           <v-spacer />
+
           <v-btn variant="outlined" @click="dialog = true" color="primary">{{
             $t("labels.addQuestion")
           }}</v-btn>

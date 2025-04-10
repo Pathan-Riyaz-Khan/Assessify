@@ -1,5 +1,7 @@
-export default interface UserQuizResponse {
-  name: string;
-  email: string;
-  score: number;
+export interface UserQuizResponse {
+  id: number;
+  title: string;
+  description: string;
+  startTime: Date;
+  endTime: Date;
 }

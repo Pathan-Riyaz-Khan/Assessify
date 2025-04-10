@@ -1,4 +1,4 @@
-import type UserQuizResponse from "@/types/response/userQuiz";
+import type QuizUserResponse from "@/types/response/quizUser";
 
 export interface QuizResponse {
   id: number;
@@ -7,7 +7,7 @@ export interface QuizResponse {
   accuracy: number;
   userCount: number;
   password: string;
-  users: UserQuizResponse[];
+  users: QuizUserResponse[];
   createdDate: Date;
   updatedDate: Date;
   startTime: Date;

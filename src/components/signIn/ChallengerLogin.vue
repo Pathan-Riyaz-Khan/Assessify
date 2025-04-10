@@ -135,7 +135,8 @@ const login = function () {
   };
 
   userService.login(user).then((response) => {
-    if (response.status === 200) {
+    if (response.title != "Unauthorized") {
+      localStorage.setItem("token", response.token);
       router.push("/user/dashboard");
     } else {
       wrongCredintal.value = true;

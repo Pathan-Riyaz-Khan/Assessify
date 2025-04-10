@@ -65,12 +65,25 @@
           </template>
           <v-list>
             <v-list-item
-              v-for="item in menuListItems"
-              :key="item.id"
-              :prepend-icon="item.iconName"
-              :title="item.title"
+              :prepend-icon="menuListItems[0].iconName"
+              :title="menuListItems[0].title"
               class="text-primary font-poppins my-1 custom-list-item"
               style="--v-list-item-prepend-margin-right: 8px"
+              :to="create == 'Create' ? '/admin/profile' : '/user/profile'"
+            />
+            <v-list-item
+              :prepend-icon="menuListItems[1].iconName"
+              :title="menuListItems[1].title"
+              class="text-primary font-poppins my-1 custom-list-item"
+              style="--v-list-item-prepend-margin-right: 8px"
+              :to="create == 'Create' ? '/admin/settings' : '/user/settings'"
+            />
+            <v-list-item
+              :prepend-icon="menuListItems[2].iconName"
+              :title="menuListItems[2].title"
+              class="text-primary font-poppins my-1 custom-list-item"
+              style="--v-list-item-prepend-margin-right: 8px"
+              @click="logout()"
             />
           </v-list>
         </v-menu>
@@ -80,10 +93,6 @@
 </template>
 
 <script setup lang="ts">
-import { useAppTheme } from "@/composables/useTheme";
-const { dark, toggleTheme } = useAppTheme();
-import type { PropType } from "vue";
-
 interface List {
   id: number;
   title: string;
@@ -91,13 +100,51 @@ interface List {
   route: string;
 }
 
-defineProps({
+import { useAppTheme } from "@/composables/useTheme";
+const { dark, toggleTheme } = useAppTheme();
+import type { PropType } from "vue";
+import { useI18n } from "vue-i18n";
+import AdminService from "@/services/adminService";
+import UserService from "@/services/userService";
+
+const props = defineProps({
   // eslint-disable-next-line vue/require-default-prop
   listItems: Array as PropType<List[]>,
   // eslint-disable-next-line vue/require-default-prop
-  menuListItems: Array as PropType<List[]>,
   create: String,
 });
+
+const create = props.create;
+const { t } = useI18n();
+
+const menuListItems = [
+  {
+    id: 1,
+    title: t("lables.viewProfile"),
+    iconName: "mdi-account-circle-outline",
+  },
+  {
+    id: 2,
+    title: t("lables.settings"),
+    iconName: "mdi-cog-outline",
+  },
+  {
+    id: 3,
+    title: t("labels.logout"),
+    iconName: "mdi-logout",
+  },
+];
+
+const adminService = new AdminService();
+const userService = new UserService();
+
+const logout = () => {
+  if (create === "Create") {
+    adminService.ClearAuth();
+  } else {
+    userService.ClearAuth();
+  }
+};
 </script>
 
 <style>
